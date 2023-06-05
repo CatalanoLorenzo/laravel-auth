@@ -1,5 +1,10 @@
 @extends('layouts.admin')
 @section('content')
+@if (session('message'))
+    <div class="alert alert-success" role="alert">
+        <strong>{{session('message')}}</strong>
+    </div>
+    @endif
 <a class="btn btn-primary" href="{{Route('admin.posts.create')}}" role="button">Add Post</a>
 <div class="table-responsive">
     <table class="table table-striped
