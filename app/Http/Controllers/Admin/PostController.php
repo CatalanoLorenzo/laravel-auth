@@ -17,7 +17,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::orderByDesc('id')->paginate(8);
-        return view('admin.posts.index',compact('posts'));
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -39,10 +39,11 @@ class PostController extends Controller
     public function store(StorePostRequest $request)
     {
         $val_data_form = $request->validated();
-        array_push($val_data_form,Post::generateSlug($val_data_form->title));
-       dd($val_data_form);
+
+        $val_data_form['slug'] = Post::generateSlug($val_data_form["title"]);
+        //dd($val_data_form);
         Post::create($val_data_form);
-        return to_route('admin.posts.index')->with('message','posts add successfully');
+        return to_route('admin.posts.index')->with('message', 'posts add successfully');
     }
 
     /**
@@ -53,7 +54,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('admin.posts.show', compact("post"));
     }
 
     /**
@@ -64,7 +65,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact("post"));
     }
 
     /**
@@ -76,7 +77,12 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        $val_data_form = $request->validated();
+
+        $val_data_form['slug'] = Post::generateSlug($val_data_form["title"]);
+        //dd($val_data_form);
+        $post->update($val_data_form);
+        return to_route('admin.posts.index')->with('message', 'posts add successfully');
     }
 
     /**
@@ -87,6 +93,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return to_route('admin.posts.index')->with('message', 'comics is delete');
     }
 }
